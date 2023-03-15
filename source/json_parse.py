@@ -5,6 +5,7 @@ findspark.init()
 from pyspark.sql import SparkSession
 from pyspark.sql import functions as F
 from pyspark.sql import Window
+from source import logger
 
 spark = SparkSession.builder.appName("sample").master("local[*]").getOrCreate()
 
@@ -26,7 +27,7 @@ def main():
 #    return spark
 """
 
-
+@logger.time_elapse
 def read_json_file() -> list:
     database_list = ["DB_NAME"]
     dataframe_list = []
@@ -35,7 +36,7 @@ def read_json_file() -> list:
         dataframe_list.append(df)
     return database_list, dataframe_list
 
-
+@logger.time_elapse
 def write_table(db_list: list, df_list: list):
     for i in range(len(df_list)):
         try:# table comment가 있는 경우
@@ -85,9 +86,10 @@ def write_table(db_list: list, df_list: list):
                                                     F.lit("N").alias("standard_yn"))
 
         parse_df_json_table.coalesce(1).write.mode("overwrite").format("csv")\
-                                       .option("encoding","euc-kr").option("header", "true").save(f"C:/Users/JIHO PARK/Downloads/s3 csv파일/s3테이블/{db_list[i]}") # euc-kr로 한글 인코딩
+                                       .option("encoding","euc-kr").option("header", "true").save(f"C:/Users/jiho3/Downloads/테이블/{db_list[i]}") # euc-kr로 한글 인코딩
     return
 
+@logger.time_elapse
 def write_column(db_list: list, df_list: list):
     for i in range(len(df_list)):
         try:# column comment가 있는 경우
@@ -148,7 +150,7 @@ def write_column(db_list: list, df_list: list):
                                                      F.col("Description"))
 
         parse_df_json_column.coalesce(1).write.mode("overwrite").format("csv")\
-                                        .option("encoding","euc-kr").option("header", "true").save(f"C:/Users/JIHO PARK/Downloads/s3 csv파일/s3컬럼/{db_list[i]}") # euc-kr로 한글 인코딩
+                                        .option("encoding","euc-kr").option("header", "true").save(f"C:/Users/jiho3/Downloads/컬럼/{db_list[i]}") # euc-kr로 한글 인코딩
     return
 # split은 \\( 해야 가능하다
 # raw_dhub, sdhub 나눠서 처리 try, except로 나눔

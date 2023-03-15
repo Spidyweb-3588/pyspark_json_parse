@@ -1,3 +1,4 @@
-from source import json_parse
+# main.py
+from source.json_parse import main
 
-json_parse.main()
+main()
