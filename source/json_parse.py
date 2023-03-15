@@ -12,12 +12,8 @@ spark = SparkSession.builder.appName("sample").master("local[*]").getOrCreate()
 def main():
     db_list = read_json_file()[0]
     df_list = read_json_file()[1]
-    print("write table start!")
     write_table(db_list,df_list)
-    print("write table ended!")
-    print("write column_start!")
     write_column(db_list, df_list)
-    print("write column ended!")
     return
 
 
